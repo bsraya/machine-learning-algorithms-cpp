@@ -12,10 +12,17 @@ cmake ../
 
 3. Build the executable file
 ```
-make .
+make
 ```
 
 4. Run the executable file
 ```
 ./main
+```
+
+5. Clean up the build files (optional)
+```
+make clean
+
+make # rebuild
 ```

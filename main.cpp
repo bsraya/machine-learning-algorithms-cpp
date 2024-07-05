@@ -1,18 +1,30 @@
-#include <vector>
+#include "regression.h"
+#include "type.h"
+#include "dataset.h"
 #include <iostream>
-#include "optimizer.h"
+#include <vector>
+#include <fstream>
+#include <string>
+
+using std::cout;
+using std::string;
+using std::vector;
 
 int main()
 {
-  std::vector<float> vec;
-  vec = Optimizer::batchGradientDescent();
+  string metrics = "mse";
+  string optimizer = "sgd";
+  Regression::LinearRegression<vector<Type::Iris>, vector<float>> linear_regression(0.01, 10000, metrics, optimizer);
 
-  for (auto i : vec)
-  {
-    std::cout << i << '\n';
-  }
+  Dataset::Iris iris;
+  iris.load();
 
-  std::cout << "Hello, World!" << '\n';
+  vector<Type::Iris> X = iris.getData();
+  vector<float> y = iris.getTarget();
+
+  linear_regression.fit(X, y);
+  linear_regression.getIntercept();
+  linear_regression.getCoefficients();
 
   return 0;
 }

@@ -1,42 +1,19 @@
-#include <vector>
+#include <iostream>
 #include "optimizer.h"
 
-namespace Optimizer
+using std::cout;
+
+Optimizer::StochasticGradientDescent::StochasticGradientDescent()
 {
-  std::vector<float> batchGradientDescent()
-  {
-    std::vector<float> vec;
+    cout << "Stochastic gradient descent" << "\n";
+}
 
-    for (int i = 1; i <= 5; i++)
-    {
-      // convert `i` to float
-      vec.push_back(i * 1.0);
-    }
+Optimizer::StochasticGradientDescent::~StochasticGradientDescent()
+{
+    cout << "Stochastic gradient descent has ended" << "\n";
+}
 
-    return vec;
-  }
-
-  std::vector<float> miniBatchGradientDescent()
-  {
-    std::vector<float> vec;
-
-    for (int i = 1; i <= 5; i++)
-    {
-      vec.push_back(i * 1.0);
-    }
-
-    return vec;
-  }
-
-  std::vector<float> stochasticGradientDescent()
-  {
-    std::vector<float> vec;
-
-    for (int i = 1; i <= 5; i++)
-    {
-      vec.push_back(i * 1.0);
-    }
-
-    return vec;
-  }
+void Optimizer::StochasticGradientDescent::backpropagate()
+{
+    return;
 }

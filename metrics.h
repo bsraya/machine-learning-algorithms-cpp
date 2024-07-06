@@ -1,18 +1,22 @@
 #ifndef METRICS_H
 #define METRICS_H
 
+#include <Eigen/Dense>
+
+using Eigen::VectorXf;
+
 namespace Metrics
 {
     class MeanSquaredError
     {
     public:
-        static float calculate();
+        static float calculate(const VectorXf &predictions, const VectorXf &target);
     };
 
     class MeanAbsoluteError
     {
     public:
-        static float calculate();
+        static float calculate(const VectorXf &predictions, const VectorXf &target);
     };
 }
 

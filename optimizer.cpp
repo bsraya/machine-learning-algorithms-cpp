@@ -3,17 +3,23 @@
 
 using std::cout;
 
-Optimizer::StochasticGradientDescent::StochasticGradientDescent()
+VectorXf Optimizer::StochasticGradientDescent::run(
+    const VectorXf &predictions,
+    const VectorXf &target,
+    const float &learning_rate,
+    const float &intercept,
+    const VectorXf &coefficients)
 {
-    cout << "Stochastic gradient descent" << "\n";
-}
+    float new_intercept = intercept - learning_rate * (predictions - target).mean();
+    VectorXf temp_coefficients = coefficients - (learning_rate * (target.transpose() * predictions)) / predictions.size();
 
-Optimizer::StochasticGradientDescent::~StochasticGradientDescent()
-{
-    cout << "Stochastic gradient descent has ended" << "\n";
-}
+    VectorXf new_coefficients = VectorXf(temp_coefficients.size() + 1);
+    new_coefficients(0) = new_intercept;
 
-void Optimizer::StochasticGradientDescent::backpropagate()
-{
-    return;
+    for (int i = 1; i < temp_coefficients.size(); i++)
+    {
+        new_coefficients(i) = temp_coefficients(i);
+    }
+
+    return new_coefficients;
 }

@@ -3,7 +3,11 @@
 
 #include <fstream>
 #include <vector>
+#include <Eigen/Dense>
+#include "csv.h"
 
+using Eigen::MatrixXf;
+using Eigen::VectorXf;
 using std::ifstream;
 using std::vector;
 
@@ -12,29 +16,33 @@ namespace Dataset
   class Iris
   {
   public:
-    vector<Type::Iris> data;
-    vector<float> target;
-    ifstream file;
+    const int row_size = 150;
+    const int col_size = 5;
+    MatrixXf data;
+    VectorXf target;
 
     Iris();
-    ~Iris();
 
     void load();
-    vector<Type::Iris> getData();
-    vector<float> getTarget();
+    vector<int> getShape();
+    MatrixXf getData();
+    VectorXf getTarget();
   };
 
   class CalifornianHousing
   {
   public:
-    vector<Type::CalifornianHousing> data;
-    vector<float> target;
-    ifstream file;
+    const int row_size = 20640;
+    const int col_size = 8;
+    MatrixXf data;
+    VectorXf target;
 
     CalifornianHousing();
-    ~CalifornianHousing();
 
     void load();
+    vector<int> getShape();
+    MatrixXf getData();
+    VectorXf getTarget();
   };
 }
 

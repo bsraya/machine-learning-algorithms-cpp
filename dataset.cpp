@@ -5,81 +5,110 @@
 
 using std::string;
 
-Dataset::Iris::Iris()
+Dataset::Iris::Iris() : data(Dataset::Iris::row_size, Dataset::Iris::col_size), target(Dataset::Iris::row_size)
 {
-  file.open("iris.csv");
-}
-
-Dataset::Iris::~Iris()
-{
-  file.close();
 }
 
 void Dataset::Iris::load()
 {
-  string line;
+  float sepal_length;
+  float sepal_width;
+  float petal_length;
+  float petal_width;
+  float species;
+  int index = 0;
 
-  while (std::getline(file, line))
+  io::CSVReader<5> in("iris.csv");
+  in.read_header(
+      io::ignore_extra_column,
+      "sepal_length",
+      "sepal_width",
+      "petal_length",
+      "petal_width",
+      "species");
+
+  while (in.read_row(sepal_length, sepal_width, petal_length, petal_width, species))
   {
-    Type::Iris iris;
-    float species;
-
-    sscanf(
-        line.c_str(),
-        "%f,%f,%f,%f,%f",
-        &iris.sepal_length,
-        &iris.sepal_width,
-        &iris.petal_length,
-        &iris.petal_width,
-        &species);
-
-    data.push_back(iris);
-    target.push_back(species);
+    Dataset::Iris::data(index, 0) = sepal_length;
+    Dataset::Iris::data(index, 1) = sepal_width;
+    Dataset::Iris::data(index, 2) = petal_length;
+    Dataset::Iris::data(index, 3) = petal_width;
+    Dataset::Iris::target(index) = species;
+    index++;
   }
 }
 
-vector<Type::Iris> Dataset::Iris::getData()
+MatrixXf Dataset::Iris::getData()
 {
   return Dataset::Iris::data;
 }
 
-vector<float> Dataset::Iris::getTarget()
+VectorXf Dataset::Iris::getTarget()
 {
   return Dataset::Iris::target;
 }
 
-Dataset::CalifornianHousing::CalifornianHousing()
+vector<int> Dataset::Iris::getShape()
 {
-  file.open("boston_housing.csv");
+  vector<int> shape = {Dataset::Iris::row_size, Dataset::Iris::col_size};
+  return shape;
 }
 
-Dataset::CalifornianHousing::~CalifornianHousing()
+Dataset::CalifornianHousing::CalifornianHousing() : data(Dataset::CalifornianHousing::row_size, Dataset::CalifornianHousing::col_size), target(Dataset::CalifornianHousing::row_size)
 {
-  file.close();
 }
 
 void Dataset::CalifornianHousing::load()
 {
-  string line;
+  float median_income;
+  float house_age;
+  float average_rooms;
+  float population;
+  float average_occupancy;
+  float latitude;
+  float longitude;
+  float median_house_value;
+  int index = 0;
 
-  while (std::getline(file, line))
+  io::CSVReader<8> in("california_housing.csv");
+  in.read_header(
+      io::ignore_extra_column,
+      "median_income",
+      "house_age",
+      "average_rooms",
+      "population",
+      "average_occupancy",
+      "latitude",
+      "longitude",
+      "median_house_value");
+
+  while (in.read_row(median_income, house_age, average_rooms, population, average_occupancy, latitude, longitude, median_house_value))
   {
-    Type::CalifornianHousing housing;
-    float price;
+    Dataset::CalifornianHousing::data(index, 0) = median_income;
+    Dataset::CalifornianHousing::data(index, 1) = house_age;
+    Dataset::CalifornianHousing::data(index, 2) = average_rooms;
+    Dataset::CalifornianHousing::data(index, 3) = population;
+    Dataset::CalifornianHousing::data(index, 4) = average_occupancy;
+    Dataset::CalifornianHousing::data(index, 5) = latitude;
+    Dataset::CalifornianHousing::data(index, 6) = longitude;
+    Dataset::CalifornianHousing::target(index) = median_house_value;
 
-    sscanf(
-        line.c_str(),
-        "%f,%f,%f,%f,%f,%f,%f,%f",
-        &housing.median_income,
-        &housing.house_age,
-        &housing.average_rooms,
-        &housing.population,
-        &housing.average_occupancy,
-        &housing.latitude,
-        &housing.longitude,
-        &price);
-
-    data.push_back(housing);
-    target.push_back(price);
+    index++;
   }
+}
+
+MatrixXf Dataset::CalifornianHousing::getData()
+{
+  return Dataset::CalifornianHousing::data;
+}
+
+VectorXf Dataset::CalifornianHousing::getTarget()
+{
+  return Dataset::CalifornianHousing::target;
+}
+
+vector<int> Dataset::CalifornianHousing::getShape()
+{
+  vector<int> shape = {Dataset::CalifornianHousing::row_size, Dataset::CalifornianHousing::col_size};
+  return shape;
 }

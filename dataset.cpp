@@ -3,10 +3,17 @@
 #include "type.h"
 #include "dataset.h"
 
+using std::getline;
 using std::string;
 
 Dataset::Iris::Iris() : data(Dataset::Iris::row_size, Dataset::Iris::col_size), target(Dataset::Iris::row_size)
 {
+  file.open("iris.csv");
+}
+
+Dataset::Iris::~Iris()
+{
+  file.close();
 }
 
 void Dataset::Iris::load()
@@ -17,23 +24,26 @@ void Dataset::Iris::load()
   float petal_width;
   float species;
   int index = 0;
+  string line;
 
-  io::CSVReader<5> in("iris.csv");
-  in.read_header(
-      io::ignore_extra_column,
-      "sepal_length",
-      "sepal_width",
-      "petal_length",
-      "petal_width",
-      "species");
-
-  while (in.read_row(sepal_length, sepal_width, petal_length, petal_width, species))
+  while (getline(file, line))
   {
-    Dataset::Iris::data(index, 0) = sepal_length;
-    Dataset::Iris::data(index, 1) = sepal_width;
-    Dataset::Iris::data(index, 2) = petal_length;
-    Dataset::Iris::data(index, 3) = petal_width;
-    Dataset::Iris::target(index) = species;
+    Type::Iris iris;
+
+    sscanf(
+        line.c_str(),
+        "%f,%f,%f,%f,%f",
+        &iris.sepal_length,
+        &iris.sepal_width,
+        &iris.petal_length,
+        &iris.petal_width,
+        &iris.species);
+
+    Dataset::Iris::data(index, 0) = iris.sepal_length;
+    Dataset::Iris::data(index, 1) = iris.sepal_width;
+    Dataset::Iris::data(index, 2) = iris.petal_length;
+    Dataset::Iris::data(index, 3) = iris.petal_width;
+    Dataset::Iris::target(index) = iris.species;
     index++;
   }
 }
@@ -43,7 +53,7 @@ MatrixXf Dataset::Iris::getData()
   return Dataset::Iris::data;
 }
 
-VectorXf Dataset::Iris::getTarget()
+RowVectorXf Dataset::Iris::getTarget()
 {
   return Dataset::Iris::target;
 }
@@ -56,6 +66,12 @@ vector<int> Dataset::Iris::getShape()
 
 Dataset::CalifornianHousing::CalifornianHousing() : data(Dataset::CalifornianHousing::row_size, Dataset::CalifornianHousing::col_size), target(Dataset::CalifornianHousing::row_size)
 {
+  file.open("california_housing.csv");
+}
+
+Dataset::CalifornianHousing::~CalifornianHousing()
+{
+  file.close();
 }
 
 void Dataset::CalifornianHousing::load()
@@ -69,30 +85,33 @@ void Dataset::CalifornianHousing::load()
   float longitude;
   float median_house_value;
   int index = 0;
+  string line;
 
-  io::CSVReader<8> in("california_housing.csv");
-  in.read_header(
-      io::ignore_extra_column,
-      "median_income",
-      "house_age",
-      "average_rooms",
-      "population",
-      "average_occupancy",
-      "latitude",
-      "longitude",
-      "median_house_value");
-
-  while (in.read_row(median_income, house_age, average_rooms, population, average_occupancy, latitude, longitude, median_house_value))
+  while (getline(file, line))
   {
-    Dataset::CalifornianHousing::data(index, 0) = median_income;
-    Dataset::CalifornianHousing::data(index, 1) = house_age;
-    Dataset::CalifornianHousing::data(index, 2) = average_rooms;
-    Dataset::CalifornianHousing::data(index, 3) = population;
-    Dataset::CalifornianHousing::data(index, 4) = average_occupancy;
-    Dataset::CalifornianHousing::data(index, 5) = latitude;
-    Dataset::CalifornianHousing::data(index, 6) = longitude;
-    Dataset::CalifornianHousing::target(index) = median_house_value;
+    Type::CalifornianHousing californian_housing;
+    float median_house_value;
 
+    sscanf(
+        line.c_str(),
+        "%f,%f,%f,%f,%f,%f,%f,%f",
+        &californian_housing.median_income,
+        &californian_housing.house_age,
+        &californian_housing.average_rooms,
+        &californian_housing.population,
+        &californian_housing.average_occupancy,
+        &californian_housing.latitude,
+        &californian_housing.longitude,
+        &median_house_value);
+
+    Dataset::CalifornianHousing::data(index, 0) = californian_housing.median_income;
+    Dataset::CalifornianHousing::data(index, 1) = californian_housing.house_age;
+    Dataset::CalifornianHousing::data(index, 2) = californian_housing.average_rooms;
+    Dataset::CalifornianHousing::data(index, 3) = californian_housing.population;
+    Dataset::CalifornianHousing::data(index, 4) = californian_housing.average_occupancy;
+    Dataset::CalifornianHousing::data(index, 5) = californian_housing.latitude;
+    Dataset::CalifornianHousing::data(index, 6) = californian_housing.longitude;
+    Dataset::CalifornianHousing::target(index) = californian_housing.median_house_value;
     index++;
   }
 }
@@ -102,7 +121,7 @@ MatrixXf Dataset::CalifornianHousing::getData()
   return Dataset::CalifornianHousing::data;
 }
 
-VectorXf Dataset::CalifornianHousing::getTarget()
+RowVectorXf Dataset::CalifornianHousing::getTarget()
 {
   return Dataset::CalifornianHousing::target;
 }

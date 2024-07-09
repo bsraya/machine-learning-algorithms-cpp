@@ -9,6 +9,7 @@ namespace Type
         float sepal_width;
         float petal_length;
         float petal_width;
+        float species;
     };
 
     struct CalifornianHousing
@@ -20,6 +21,7 @@ namespace Type
         float average_occupancy;
         float latitude;
         float longitude;
+        float median_house_value;
     };
 }
 

@@ -4,10 +4,10 @@
 #include <fstream>
 #include <vector>
 #include <Eigen/Dense>
-#include "csv.h"
 
+using Eigen::MatrixX4f;
 using Eigen::MatrixXf;
-using Eigen::VectorXf;
+using Eigen::RowVectorXf;
 using std::ifstream;
 using std::vector;
 
@@ -17,32 +17,36 @@ namespace Dataset
   {
   public:
     const int row_size = 150;
-    const int col_size = 5;
+    const int col_size = 4;
     MatrixXf data;
-    VectorXf target;
+    RowVectorXf target;
+    ifstream file;
 
     Iris();
+    ~Iris();
 
     void load();
     vector<int> getShape();
     MatrixXf getData();
-    VectorXf getTarget();
+    RowVectorXf getTarget();
   };
 
   class CalifornianHousing
   {
   public:
     const int row_size = 20640;
-    const int col_size = 8;
+    const int col_size = 7;
     MatrixXf data;
-    VectorXf target;
+    RowVectorXf target;
+    ifstream file;
 
     CalifornianHousing();
+    ~CalifornianHousing();
 
     void load();
     vector<int> getShape();
     MatrixXf getData();
-    VectorXf getTarget();
+    RowVectorXf getTarget();
   };
 }
 

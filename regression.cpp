@@ -1,5 +1,4 @@
 #include "regression.h"
-#include "optimizer.h"
 #include "type.h"
 #include "metrics.h"
 #include <iostream>
@@ -21,22 +20,25 @@ Regression::LinearRegression::LinearRegression(float learning_rate, int iteratio
 {
 }
 
-void Regression::LinearRegression::fit(const MatrixXf &data, const VectorXf &target)
+void Regression::LinearRegression::fit(const MatrixXf &data, const RowVectorXf &target)
 {
+    Regression::LinearRegression::data = data;
+    Regression::LinearRegression::target = target;
+    Regression::LinearRegression::intercept = 0.0;
+    Regression::LinearRegression::coefficients = RowVectorXf::Zero(data.cols());
+
     for (int i = 0; i < Regression::LinearRegression::iterations; i++)
     {
         Regression::LinearRegression::optimize();
-        cout << "Loss: " << Regression::LinearRegression::loss() << "\n";
+        cout << "(Iteration " << i << ") " << "Loss: " << Regression::LinearRegression::loss(data) << "\n";
     }
 }
 
-VectorXf Regression::LinearRegression::predict(const MatrixXf &data)
+RowVectorXf Regression::LinearRegression::predict(const MatrixXf &data)
 {
-    VectorXf interceptVector = VectorXf::Constant(
-        data.rows(),
-        Regression::LinearRegression::intercept);
-
-    return interceptVector + data * Regression::LinearRegression::coefficients;
+    RowVectorXf predictions = data * Regression::LinearRegression::coefficients.transpose();
+    RowVectorXf interceptVector = RowVectorXf::Constant(data.rows(), Regression::LinearRegression::intercept);
+    return interceptVector + predictions;
 }
 
 const float Regression::LinearRegression::getIntercept()
@@ -51,29 +53,24 @@ const VectorXf Regression::LinearRegression::getCoefficients()
 
 void Regression::LinearRegression::optimize()
 {
-    vector<float> coefficients;
+    const int length = Regression::LinearRegression::data.rows();
+    RowVectorXf predictions = predict(Regression::LinearRegression::data);
+    RowVectorXf error = predictions - Regression::LinearRegression::target;
 
-    VectorXf predictions = Regression::LinearRegression::predict(Regression::LinearRegression::data);
-    if (Regression::LinearRegression::optimizer == "sgd")
-    {
-        VectorXf coefficients = Optimizer::StochasticGradientDescent::run(
-            predictions,
-            Regression::LinearRegression::target,
-            Regression::LinearRegression::learning_rate,
-            Regression::LinearRegression::intercept,
-            Regression::LinearRegression::coefficients);
-        Regression::LinearRegression::intercept = coefficients[0];
-        Regression::LinearRegression::coefficients = VectorXf::Map(&coefficients[1], coefficients.size() - 1);
-    }
+    Regression::LinearRegression::intercept = Regression::LinearRegression::intercept -
+                                              (Regression::LinearRegression::learning_rate * error.sum() / length);
+
+    RowVectorXf coef_error_vector = Regression::LinearRegression::data.transpose() * error.transpose();
+    Regression::LinearRegression::coefficients = Regression::LinearRegression::coefficients -
+                                                 (Regression::LinearRegression::learning_rate * coef_error_vector / length);
+    // cout << "Intercept: " << Regression::LinearRegression::intercept << "\n";
+    // cout << "Coefficients: " << Regression::LinearRegression::coefficients << "\n\n";
 }
 
-float Regression::LinearRegression::loss()
+float Regression::LinearRegression::loss(const MatrixXf &data)
 {
-    VectorXf predictions = Regression::LinearRegression::predict(Regression::LinearRegression::data);
-
     if (Regression::LinearRegression::metrics == "mse")
-        return Metrics::MeanSquaredError::calculate(predictions, Regression::LinearRegression::target);
+        return Metrics::MeanSquaredError::calculate(Regression::LinearRegression::predict(data), Regression::LinearRegression::target);
 
-    if (Regression::LinearRegression::metrics == "mae")
-        return Metrics::MeanAbsoluteError::calculate(predictions, Regression::LinearRegression::target);
+    return Metrics::MeanSquaredError::calculate(Regression::LinearRegression::predict(data), Regression::LinearRegression::target);
 }

@@ -15,24 +15,23 @@ using std::vector;
 
 int main()
 {
-  Regression::LinearRegression linear_regression(0.01, 10000, "mse", "sgd");
+  Regression::LinearRegression linear_regression(0.01, 1000, "mae", "sgd");
 
   Dataset::Iris iris;
   iris.load();
 
   vector<int> shape = iris.getShape();
   MatrixXf X = iris.getData();
-  VectorXf y = iris.getTarget();
+  RowVectorXf y = iris.getTarget();
 
-  cout << "Shape: ";
-  for (auto i : shape)
+  linear_regression.fit(X, y);
+  cout << "Intercept: " << linear_regression.getIntercept() << "\n";
+
+  cout << "Coefficients: ";
+  for (auto coef : linear_regression.getCoefficients())
   {
-    cout << i << " ";
+    cout << coef << " ";
   }
-
-  // linear_regression.fit(X, y);
-  // linear_regression.getIntercept();
-  // linear_regression.getCoefficients();
 
   return 0;
 }

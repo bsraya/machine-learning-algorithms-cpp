@@ -13,14 +13,8 @@ using std::vector;
 
 namespace Regression
 {
-
   class LinearRegression
   {
-  private:
-    MatrixXf data;
-    VectorXf target;
-    float loss();
-
   public:
     float learning_rate;
     int iterations;
@@ -28,7 +22,9 @@ namespace Regression
     string optimizer;
 
     float intercept;
-    VectorXf coefficients;
+    RowVectorXf coefficients;
+    MatrixXf data;
+    RowVectorXf target;
 
     LinearRegression();
 
@@ -38,12 +34,13 @@ namespace Regression
         const string &metrics,
         const string &optimizer);
 
-    void fit(const MatrixXf &data, const VectorXf &target);
+    void fit(const MatrixXf &data, const RowVectorXf &target);
     void optimize();
 
-    VectorXf predict(const MatrixXf &data);
+    RowVectorXf predict(const MatrixXf &data);
     const float getIntercept();
     const VectorXf getCoefficients();
+    float loss(const MatrixXf &data);
   };
 }
 

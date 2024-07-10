@@ -1,6 +1,9 @@
 #include "regression.h"
 #include "type.h"
 #include "dataset.h"
+#include "optimizer.h"
+#include "metrics.h"
+#include <chrono>
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -13,10 +16,10 @@ using std::cout;
 using std::string;
 using std::vector;
 
+using namespace std::chrono;
+
 int main()
 {
-  Regression::LinearRegression linear_regression(0.01, 1000, "mae", "sgd");
-
   Dataset::Iris iris;
   iris.load();
 
@@ -24,13 +27,28 @@ int main()
   MatrixXf X = iris.getData();
   RowVectorXf y = iris.getTarget();
 
-  linear_regression.fit(X, y);
-  cout << "Intercept: " << linear_regression.getIntercept() << "\n";
+  vector<int> iterations = {10, 100, 1000, 10000, 100000, 1000000};
 
-  cout << "Coefficients: ";
-  for (auto coef : linear_regression.getCoefficients())
+  for (int iter : iterations)
   {
-    cout << coef << " ";
+    auto start = high_resolution_clock::now();
+    Regression::LinearRegression linear_regression(0.01, iter, Metrics::Type::MSE, Optimizer::Type::SGD);
+    linear_regression.fit(X, y);
+    cout << "Intercept: " << linear_regression.getIntercept() << "\n";
+
+    cout << "Coefficients: ";
+    for (auto coef : linear_regression.getCoefficients())
+    {
+      cout << coef << " ";
+    }
+
+    cout << "\n";
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start);
+
+    cout << "Training time: " << duration.count() << "ms\n";
+
+    cout << "\n\n";
   }
 
   return 0;

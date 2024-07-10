@@ -26,6 +26,12 @@ namespace Metrics
     public:
         static float calculate(const VectorXf &predictions, const VectorXf &target);
     };
+
+    class RootMeanSquaredError
+    {
+    public:
+        static float calculate(const VectorXf &predictions, const VectorXf &target);
+    };
 }
 
 #endif // METRICS_H

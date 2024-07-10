@@ -72,5 +72,9 @@ float Regression::LinearRegression::loss(const MatrixXf &data)
     if (Regression::LinearRegression::metrics == Metrics::Type::MSE)
         return Metrics::MeanSquaredError::calculate(Regression::LinearRegression::predict(data), Regression::LinearRegression::target);
 
-    return Metrics::MeanSquaredError::calculate(Regression::LinearRegression::predict(data), Regression::LinearRegression::target);
+    if (Regression::LinearRegression::metrics == Metrics::Type::MAE)
+        return Metrics::MeanAbsoluteError::calculate(Regression::LinearRegression::predict(data), Regression::LinearRegression::target);
+
+    if (Regression::LinearRegression::metrics == Metrics::Type::RMSE)
+        return Metrics::RootMeanSquaredError::calculate(Regression::LinearRegression::predict(data), Regression::LinearRegression::target);
 }

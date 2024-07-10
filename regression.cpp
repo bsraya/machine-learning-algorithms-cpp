@@ -11,11 +11,11 @@ Regression::LinearRegression::LinearRegression()
     learning_rate = 0.01;
     iterations = 100;
     intercept = 0.0;
-    metrics = "mse";
-    optimizer = "sgd";
+    metrics = Metrics::Type::MSE;
+    optimizer = Optimizer::Type::SGD;
 }
 
-Regression::LinearRegression::LinearRegression(float learning_rate, int iterations, const string &metrics, const string &optimizer)
+Regression::LinearRegression::LinearRegression(float learning_rate, int iterations, Metrics::Type metrics, Optimizer::Type optimizer)
     : learning_rate(learning_rate), iterations(iterations), metrics(metrics), optimizer(optimizer)
 {
 }
@@ -30,7 +30,7 @@ void Regression::LinearRegression::fit(const MatrixXf &data, const RowVectorXf &
     for (int i = 0; i < Regression::LinearRegression::iterations; i++)
     {
         Regression::LinearRegression::optimize();
-        cout << "(Iteration " << i << ") " << "Loss: " << Regression::LinearRegression::loss(data) << "\n";
+        // cout << "(Iteration " << i << ") " << "Loss: " << Regression::LinearRegression::loss(data) << "\n";
     }
 }
 
@@ -69,7 +69,7 @@ void Regression::LinearRegression::optimize()
 
 float Regression::LinearRegression::loss(const MatrixXf &data)
 {
-    if (Regression::LinearRegression::metrics == "mse")
+    if (Regression::LinearRegression::metrics == Metrics::Type::MSE)
         return Metrics::MeanSquaredError::calculate(Regression::LinearRegression::predict(data), Regression::LinearRegression::target);
 
     return Metrics::MeanSquaredError::calculate(Regression::LinearRegression::predict(data), Regression::LinearRegression::target);

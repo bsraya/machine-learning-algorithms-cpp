@@ -7,6 +7,14 @@ using Eigen::VectorXf;
 
 namespace Metrics
 {
+    enum Type
+    {
+        MSE,
+        MAE,
+        RMSE,
+        F1,
+    };
+
     class MeanSquaredError
     {
     public:

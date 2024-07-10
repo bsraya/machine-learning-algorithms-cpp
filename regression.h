@@ -3,6 +3,8 @@
 #include <Eigen/Dense>
 #include <string>
 #include <vector>
+#include "optimizer.h"
+#include "metrics.h"
 
 using Eigen::MatrixXf;
 using Eigen::RowVectorXf;
@@ -18,8 +20,8 @@ namespace Regression
   public:
     float learning_rate;
     int iterations;
-    string metrics;
-    string optimizer;
+    Metrics::Type metrics;
+    Optimizer::Type optimizer;
 
     float intercept;
     RowVectorXf coefficients;
@@ -31,8 +33,8 @@ namespace Regression
     LinearRegression(
         float learning_rate,
         int iterations,
-        const string &metrics,
-        const string &optimizer);
+        Metrics::Type metrics,
+        Optimizer::Type optimizer);
 
     void fit(const MatrixXf &data, const RowVectorXf &target);
     void optimize();

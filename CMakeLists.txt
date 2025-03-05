@@ -6,10 +6,16 @@ set(EIGEN_INCLUDE_DIR /usr/include/eigen3)
 
 include_directories(${EIGEN_INCLUDE_DIR})
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/iris.csv ${CMAKE_CURRENT_BINARY_DIR}/iris.csv COPYONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/california_housing.csv ${CMAKE_CURRENT_BINARY_DIR}/california_housing.csv COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dataset/iris.csv ${CMAKE_CURRENT_BINARY_DIR}/iris.csv COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dataset/california_housing.csv ${CMAKE_CURRENT_BINARY_DIR}/california_housing.csv COPYONLY)
 
-add_executable(main main.cpp regression.cpp optimizer.cpp dataset.cpp metrics.cpp)
+add_executable(main 
+  src/main.cpp
+  src/lib/regression/regression.cpp
+  src/lib/optimizer/optimizer.cpp
+  src/lib/dataset/dataset.cpp
+  src/lib/metrics/metrics.cpp
+)
 
 set(CMAKE_CXX_COMPILER "g++")
 set(CMAKE_CXX_STANDARD 20)

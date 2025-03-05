@@ -1,8 +1,8 @@
-#include "regression.h"
-#include "type.h"
-#include "dataset.h"
-#include "optimizer.h"
-#include "metrics.h"
+#include "lib/regression/regression.h"
+#include "lib/dataset/type.h"
+#include "lib/dataset/dataset.h"
+#include "lib/optimizer/optimizer.h"
+#include "lib/metrics/metrics.h"
 #include <chrono>
 #include <iostream>
 #include <vector>
@@ -27,7 +27,7 @@ int main()
   MatrixXf X = iris.getData();
   RowVectorXf y = iris.getTarget();
 
-  vector<int> iterations = {10, 100, 1000, 10000, 100000, 1000000};
+  vector<int> iterations = {10, 100, 1000, 10000};
 
   for (int iter : iterations)
   {

@@ -1,0 +1,12 @@
+services:
+  scikit-learn-cpp-dev-env:
+    container_name: scikit-learn-cpp-dev-env
+    image: johnbjohn/cpp-dev-env:latest
+    tty: true
+    volumes:
+      - ./src:/app/src
+      - ./test:/app/test
+      - ./.gitignore:/app/.gitignore
+      - ./readme.md:/app/readme.md
+      - ./CMakeLists.txt:/app/CMakeLists.txt
+      - ~/.ssh/:/.ssh:ro

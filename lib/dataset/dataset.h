@@ -13,7 +13,17 @@ using std::vector;
 
 namespace Dataset
 {
-  class Iris
+  class DatasetBase{
+  public:
+    virtual ~DatasetBase() = default;
+
+    virtual void load() = 0;
+    virtual vector<int> getShape() = 0;
+    virtual MatrixXf getData() = 0;
+    virtual RowVectorXf getTarget() = 0;
+  };
+
+  class Iris: public DatasetBase
   {
   public:
     const int row_size = 150;
@@ -29,9 +39,10 @@ namespace Dataset
     vector<int> getShape();
     MatrixXf getData();
     RowVectorXf getTarget();
+    MatrixXf describe();
   };
 
-  class CalifornianHousing
+  class CalifornianHousing: public DatasetBase
   {
   public:
     const int row_size = 20640;

@@ -64,6 +64,35 @@ vector<int> Dataset::Iris::getShape()
   return shape;
 }
 
+MatrixXf Dataset::Iris::describe() {
+  // 1. Caclulate data count for each column
+
+  // 2. Calculate mean
+
+  // 3. Calculate std
+
+  // 4. Calculate min
+
+  // 5. Calculate 25th percentile
+
+  // 6. Calculate 50th percentile
+
+  // 7. Calculate 75th percentile
+
+  // 8. Calculate max
+
+  // Return a matrix with the following structure:
+  //       | sepal_length, sepal_width, petal_length, petal_width
+  // count | 150, 150, 150, 150
+  // mean  | mean_sepal_length, mean_sepal_width, mean_petal_length, mean_petal_width
+  // std   | std_sepal_length, std_sepal_width, std_petal_length, std_petal_width
+  // min   | min_sepal_length, min_sepal_width, min_petal_length, min_petal_width
+  // 25%   | 25th_percentile_sepal_length, 25th_percentile_sepal_width, 25th_percentile_petal_length, 25th_percentile_petal_width
+  // 50%   | 50th_percentile_sepal_length, 50th_percentile_sepal_width, 50th_percentile_petal_length, 50th_percentile_petal_width
+  // 75%   | 75th_percentile_sepal_length, 75th_percentile_sepal_width, 75th_percentile_petal_length, 75th_percentile_petal_width
+  // max   | max_sepal_length, max_sepal_width, max_petal_length, max_petal_width
+}
+
 Dataset::CalifornianHousing::CalifornianHousing() : data(Dataset::CalifornianHousing::row_size, Dataset::CalifornianHousing::col_size), target(Dataset::CalifornianHousing::row_size)
 {
   file.open("california_housing.csv");
